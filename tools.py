@@ -105,7 +105,7 @@ def add_participant(p_id, folder):
 			else:
 				print 'Overwriting participant {}'.format(p_id)
 	else:
-		x = raw input('The ExperimentData.pkl file is not found. Create? Yes/no')
+		x = raw_input('The ExperimentData.pkl file is not found. Create? Yes/no')
 		while x != 'Yes' and x != 'no':
 			x = raw_input('Bad input. Create new data file? Yes/no\n')
 		if x == 'no':
