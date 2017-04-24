@@ -240,8 +240,7 @@ def check_accuracy(trial):
 	ax3.set_aspect(asp)
 	ax3.legend()
 
-	# plt.show()
-	return fig
+	plt.show()
 
 
 def get_accuracy_summary():
