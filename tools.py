@@ -6,6 +6,7 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import style
+from scipy.io import savemat
 style.use('ggplot')
 
 
@@ -139,14 +140,14 @@ def dispersion(eyex, eyez, window):
 	return d
 
 
-def find_fixations(eyex, eyez, dispersion_th = 0.01, duration_th = 0.1):
+def find_fixations(eyex, eyez, dispersion_th = 0.01, duration_th = 0.1, measure_rate = 130.):
 
 	eyex = list(eyex)
 	eyez = list(eyez)
 
 	result = { 'start_frame':[], 'end_frame':[], 'duration':[], 'dispersion':[], 'centre_x':[], 'centre_z':[] }
 
-	window = [0, int(duration_th * 130)] # duration th should be in seconds
+	window = [0, int(duration_th * measure_rate)] # duration th should be in seconds
 	index = 1
 
 	while window[1] < len(eyex):
@@ -162,13 +163,13 @@ def find_fixations(eyex, eyez, dispersion_th = 0.01, duration_th = 0.1):
 
 			result['start_frame'].append(window[0])
 			result['end_frame'].append(window[1])
-			result['duration'].append((window[1] - window[0] + 1) / 130.)
+			result['duration'].append((window[1] - window[0] + 1) / measure_rate)
 			result['dispersion'].append(dispersion(eyex, eyez, window))
 			result['centre_x'].append(np.mean( eyex[window[0]:window[1]] ))
 			result['centre_z'].append(np.mean( eyez[window[0]:window[1]] ))
 
 			index += 1
-			window = [window[1] + 1, window[1] + 13]
+			window = [window[1] + 1, window[1] + int(measure_rate * duration_th)]
 
 		else:
 			window = [ x + 1 for x in window ]
@@ -177,7 +178,6 @@ def find_fixations(eyex, eyez, dispersion_th = 0.01, duration_th = 0.1):
 
 
 def dic2mat():
-	from scipy.io import savemat
 	dic = load_data()
 	savemat('ExperimentData.mat', dic)
 
