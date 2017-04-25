@@ -77,15 +77,13 @@ def organise(files_folder):
 				accuracy_trial_no += 1
 			elif 'SHORT' in f.name:
 				result['short_trials']['t' + str(short_trial_no)] = dictionarise(text, data)
-				result['short_trials']['t' + str(short_trial_no)]['fix'] = find_fixations(
-																							result['short_trials']['t' + str(short_trial_no)]['averagexeye'],
-																							result['short_trials']['t' + str(short_trial_no)]['averagezeye'])
+				result['short_trials']['t' + str(short_trial_no)]['fix'] = find_fixations(result['short_trials']['t' + str(short_trial_no)]['averagexeye'],
+					result['short_trials']['t' + str(short_trial_no)]['averagezeye'])
 				short_trial_no += 1
 			else:
 				result['trials']['t' + str(trial_no)] = dictionarise(text, data)
-				result['trials']['t' + str(trial_no)]['fix'] = find_fixations(
-																				result['trials']['t' + str(trial_no)]['averagexeye'],
-																				result['trials']['t' + str(trial_no)]['averagezeye'])
+				result['trials']['t' + str(trial_no)]['fix'] = find_fixations(result['trials']['t' + str(trial_no)]['averagexeye'],
+					result['trials']['t' + str(trial_no)]['averagezeye'])
 
 				trial_no += 1
 		print 'Done with:   {}'.format(f.name[:-4])
