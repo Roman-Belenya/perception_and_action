@@ -95,6 +95,7 @@ def add_participant(p_id, folder):
 
 	if 'ExperimentData.pkl' in os.listdir(os.getcwd()):
 		prior = load_data().keys()
+		print prior
 		if p_id in prior:
 			x = raw_input('Participant {} already exists. Overwrite? Yes/no\n'.format(p_id))
 			while x != 'Yes' and x != 'no':
@@ -105,7 +106,7 @@ def add_participant(p_id, folder):
 			else:
 				print 'Overwriting participant {}'.format(p_id)
 	else:
-		x = raw input('The ExperimentData.pkl file is not found. Create? Yes/no')
+		x = raw_input('The ExperimentData.pkl file is not found. Create? Yes/no\n')
 		while x != 'Yes' and x != 'no':
 			x = raw_input('Bad input. Create new data file? Yes/no\n')
 		if x == 'no':
@@ -115,13 +116,13 @@ def add_participant(p_id, folder):
 			with open('ExperimentData.pkl', 'wb'):
 				print 'New experiment data file created in {}'.format(os.getcwd())
 
-		current = {}
-		current[p_id] = organise(folder)
-		print '-----------------------------------------------------------'
-		print 'Participant\'s id:               {}'.format(p_id)
-		print 'Number of accuracy trials:       {}'.format(len( current[p_id]['accuracy'].keys() ))
-		print 'Number of short trials:          {}'.format(len( current[p_id]['short_trials'].keys() ))
-		print 'Number of experimental trials:   {}\n'.format(len( current[p_id]['trials'].keys() ))
+	current = {}
+	current[p_id] = organise(folder)
+	print '-----------------------------------------------------------'
+	print 'Participant\'s id:               {}'.format(p_id)
+	print 'Number of accuracy trials:       {}'.format(len( current[p_id]['accuracy'].keys() ))
+	print 'Number of short trials:          {}'.format(len( current[p_id]['short_trials'].keys() ))
+	print 'Number of experimental trials:   {}\n'.format(len( current[p_id]['trials'].keys() ))
 
 	x = raw_input('Save data? Yes/no\n')
 	if x == 'Yes':
@@ -191,6 +192,7 @@ def check_accuracy(trial):
 
 	error_x = np.array(trial['errorx']) * 100
 	error_z = np.array(trial['errorz']) * 100
+	error_y = np.array(trial['errory']) * 100
 
 	dist = np.array(trial['totalerror']) * 100
 
@@ -200,7 +202,7 @@ def check_accuracy(trial):
 	x = r1 * np.cos(theta) + centre_x
 	z = r1 * np.sin(theta) + centre_z
 
-	fig = plt.figure(figsize = [15, 15])
+	fig = plt.figure()
 	fig.subplots_adjust(wspace=0.05, top=1, right=0.97, left=0.03, bottom=0)
 
 
@@ -230,6 +232,7 @@ def check_accuracy(trial):
 	ax3 = fig.add_subplot(133)
 	ax3.plot(error_x, 'b-', label = 'Error X')
 	ax3.plot(error_z, 'g-', label = 'Error Z')
+	ax3.plot(error_y, 'y-', label = 'Error Y')
 	ax3.axhline(1, color = 'r')
 	ax3.axhline(-1, color = 'r')
 	ax3.axhline(0, color = 'k', linestyle = ':')
