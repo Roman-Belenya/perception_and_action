@@ -6,6 +6,7 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import style
+from scipy.io import savemat
 style.use('ggplot')
 
 
@@ -95,6 +96,7 @@ def add_participant(p_id, folder):
 
 	if 'ExperimentData.pkl' in os.listdir(os.getcwd()):
 		prior = load_data().keys()
+		print prior
 		if p_id in prior:
 			x = raw_input('Participant {} already exists. Overwrite? Yes/no\n'.format(p_id))
 			while x != 'Yes' and x != 'no':
@@ -105,7 +107,7 @@ def add_participant(p_id, folder):
 			else:
 				print 'Overwriting participant {}'.format(p_id)
 	else:
-		x = raw input('The ExperimentData.pkl file is not found. Create? Yes/no')
+		x = raw_input('The ExperimentData.pkl file is not found. Create? Yes/no\n')
 		while x != 'Yes' and x != 'no':
 			x = raw_input('Bad input. Create new data file? Yes/no\n')
 		if x == 'no':
@@ -115,13 +117,13 @@ def add_participant(p_id, folder):
 			with open('ExperimentData.pkl', 'wb'):
 				print 'New experiment data file created in {}'.format(os.getcwd())
 
-		current = {}
-		current[p_id] = organise(folder)
-		print '-----------------------------------------------------------'
-		print 'Participant\'s id:               {}'.format(p_id)
-		print 'Number of accuracy trials:       {}'.format(len( current[p_id]['accuracy'].keys() ))
-		print 'Number of short trials:          {}'.format(len( current[p_id]['short_trials'].keys() ))
-		print 'Number of experimental trials:   {}\n'.format(len( current[p_id]['trials'].keys() ))
+	current = {}
+	current[p_id] = organise(folder)
+	print '-----------------------------------------------------------'
+	print 'Participant\'s id:               {}'.format(p_id)
+	print 'Number of accuracy trials:       {}'.format(len( current[p_id]['accuracy'].keys() ))
+	print 'Number of short trials:          {}'.format(len( current[p_id]['short_trials'].keys() ))
+	print 'Number of experimental trials:   {}\n'.format(len( current[p_id]['trials'].keys() ))
 
 	x = raw_input('Save data? Yes/no\n')
 	if x == 'Yes':
@@ -138,14 +140,14 @@ def dispersion(eyex, eyez, window):
 	return d
 
 
-def find_fixations(eyex, eyez, dispersion_th = 0.01, duration_th = 0.1):
+def find_fixations(eyex, eyez, dispersion_th = 0.01, duration_th = 0.1, measure_rate = 130.):
 
 	eyex = list(eyex)
 	eyez = list(eyez)
 
 	result = { 'start_frame':[], 'end_frame':[], 'duration':[], 'dispersion':[], 'centre_x':[], 'centre_z':[] }
 
-	window = [0, int(duration_th * 130)] # duration th should be in seconds
+	window = [0, int(duration_th * measure_rate)] # duration th should be in seconds
 	index = 1
 
 	while window[1] < len(eyex):
@@ -161,13 +163,13 @@ def find_fixations(eyex, eyez, dispersion_th = 0.01, duration_th = 0.1):
 
 			result['start_frame'].append(window[0])
 			result['end_frame'].append(window[1])
-			result['duration'].append((window[1] - window[0] + 1) / 130.)
+			result['duration'].append((window[1] - window[0] + 1) / measure_rate)
 			result['dispersion'].append(dispersion(eyex, eyez, window))
 			result['centre_x'].append(np.mean( eyex[window[0]:window[1]] ))
 			result['centre_z'].append(np.mean( eyez[window[0]:window[1]] ))
 
 			index += 1
-			window = [window[1] + 1, window[1] + 13]
+			window = [window[1] + 1, window[1] + int(measure_rate * duration_th)]
 
 		else:
 			window = [ x + 1 for x in window ]
@@ -176,7 +178,6 @@ def find_fixations(eyex, eyez, dispersion_th = 0.01, duration_th = 0.1):
 
 
 def dic2mat():
-	from scipy.io import savemat
 	dic = load_data()
 	savemat('ExperimentData.mat', dic)
 
@@ -191,6 +192,7 @@ def check_accuracy(trial):
 
 	error_x = np.array(trial['errorx']) * 100
 	error_z = np.array(trial['errorz']) * 100
+	error_y = np.array(trial['errory']) * 100
 
 	dist = np.array(trial['totalerror']) * 100
 
@@ -200,7 +202,7 @@ def check_accuracy(trial):
 	x = r1 * np.cos(theta) + centre_x
 	z = r1 * np.sin(theta) + centre_z
 
-	fig = plt.figure(figsize = [15, 15])
+	fig = plt.figure()
 	fig.subplots_adjust(wspace=0.05, top=1, right=0.97, left=0.03, bottom=0)
 
 
@@ -230,6 +232,7 @@ def check_accuracy(trial):
 	ax3 = fig.add_subplot(133)
 	ax3.plot(error_x, 'b-', label = 'Error X')
 	ax3.plot(error_z, 'g-', label = 'Error Z')
+	ax3.plot(error_y, 'y-', label = 'Error Y')
 	ax3.axhline(1, color = 'r')
 	ax3.axhline(-1, color = 'r')
 	ax3.axhline(0, color = 'k', linestyle = ':')
