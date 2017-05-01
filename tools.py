@@ -94,7 +94,6 @@ def add_participant(p_id, folder):
 
 	if 'ExperimentData.pkl' in os.listdir(os.getcwd()):
 		prior = load_data().keys()
-		print prior
 		if p_id in prior:
 			x = raw_input('Participant {} already exists. Overwrite? Yes/no\n'.format(p_id))
 			while x != 'Yes' and x != 'no':
@@ -254,17 +253,13 @@ def get_accuracy_summary():
 	p_n = len(d.keys())
 
 	for p in d.keys():
+		ax = fig.add_subplot(np.ceil(p_n / 3.), 3, p_no)
 		for t in d[p]['accuracy'].keys():
-
 			error = np.array(d[p]['accuracy'][t]['totalerror']) * 100
-			ax = fig.add_subplot(p_n, 3, p_no)
-			p_no += 1
-			ax.plot(error, 'b-')
-			ax.axhline(1, color = 'r')
+			ax.plot(error, label = t)
+			ax.axhline(1, color= 'r')
 			ax.set_ylim(0, 5)
-			ax.set_ylabel(p + ' ' + t)
-			if np.mean(error) < 1:
-				ax.plot(0, 4.5, 'g.', markersize = 15)
-			else:
-				ax.plot(0, 4.5, 'r.', markersize = 15)
+			ax.set_title(p)
+		plt.legend()
+		p_no += 1
 	plt.show()
