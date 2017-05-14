@@ -265,80 +265,48 @@ def get_accuracy_summary(data):
 	plt.show()
 
 
-def choose_index(data, participant):
+def choose_marker(data, participant, marker = 'index'):
+
+	if marker == 'index':
+		mark = ('index7x', 'index8x', 'index7y', 'index8y', 'index7z', 'index8z')
+		titles = ('Index7', 'Index8')
+	elif marker == 'thumb':
+		mark = ('thumb9x', 'thumb10x', 'thumb9y', 'thumb10y', 'thumb9z', 'thumb10z')
+		titles = ('Thumb9', 'Thumb10')
 
 	d = data
 
 	fig = plt.figure()
 	ax1 = fig.add_subplot(221)
-	ax2 = fig.add_subplot(222)
-	ax3 = fig.add_subplot(223)
-	ax4 = fig.add_subplot(224)
+	ax2 = fig.add_subplot(222, sharex = ax1)
+	ax3 = fig.add_subplot(223, sharex = ax1)
+	ax4 = fig.add_subplot(224, sharex = ax1)
 
 	for trial in d[participant]['trials'].keys():
 		if 'LeftToRight' in d[participant]['trials'][trial]['name']:
-			ax1.plot(d[participant]['trials'][trial]['index7x'], 'b-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[participant]['trials'][trial]['index8x'], 'b-', linewidth = 0.5, alpha = 0.5)
+			ax1.plot(d[participant]['trials'][trial][mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
+			ax2.plot(d[participant]['trials'][trial][mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
 
-			ax1.plot(d[participant]['trials'][trial]['index7z'], 'r-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[participant]['trials'][trial]['index8z'], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax1.plot(d[participant]['trials'][trial][mark[2]], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax2.plot(d[participant]['trials'][trial][mark[3]], 'r-', linewidth = 0.5, alpha = 0.5)
 
-			ax1.plot(d[participant]['trials'][trial]['index7y'], 'g-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[participant]['trials'][trial]['index8y'], 'g-', linewidth = 0.5, alpha = 0.5)
-
-		elif 'RightToLeft' in d[participant]['trials'][trial]['name']:
-			ax3.plot(d[participant]['trials'][trial]['index7x'], 'b-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[participant]['trials'][trial]['index8x'], 'b-', linewidth = 0.5, alpha = 0.5)
-
-			ax3.plot(d[participant]['trials'][trial]['index7z'], 'r-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[participant]['trials'][trial]['index8z'], 'r-', linewidth = 0.5, alpha = 0.5)
-
-			ax3.plot(d[participant]['trials'][trial]['index7y'], 'g-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[participant]['trials'][trial]['index8y'], 'g-', linewidth = 0.5, alpha = 0.5)
-
-
-	ax1.set_title('Index7x, Rightward')
-	ax2.set_title('Index8x, Rightward')
-	ax3.set_title('Index7x, Leftward')
-	ax4.set_title('Index8x, Leftward')
-	plt.show()
-
-
-def choose_thumb(data, participant):
-
-	d = data
-
-	fig = plt.figure()
-	ax1 = fig.add_subplot(221)
-	ax2 = fig.add_subplot(222)
-	ax3 = fig.add_subplot(223)
-	ax4 = fig.add_subplot(224)
-
-	for trial in d[participant]['trials'].keys():
-		if 'LeftToRight' in d[participant]['trials'][trial]['name']:
-			ax1.plot(d[participant]['trials'][trial]['thumb9x'], 'b-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[participant]['trials'][trial]['thumb10x'], 'b-', linewidth = 0.5, alpha = 0.5)
-
-			ax1.plot(d[participant]['trials'][trial]['thumb9z'], 'r-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[participant]['trials'][trial]['thumb10z'], 'r-', linewidth = 0.5, alpha = 0.5)
-
-			ax1.plot(d[participant]['trials'][trial]['thumb9y'], 'g-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[participant]['trials'][trial]['thumb10y'], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax1.plot(d[participant]['trials'][trial][mark[4]], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax2.plot(d[participant]['trials'][trial][mark[5]], 'g-', linewidth = 0.5, alpha = 0.5)
 
 		elif 'RightToLeft' in d[participant]['trials'][trial]['name']:
-			ax3.plot(d[participant]['trials'][trial]['thumb9x'], 'b-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[participant]['trials'][trial]['thumb10x'], 'b-', linewidth = 0.5, alpha = 0.5)
+			ax3.plot(d[participant]['trials'][trial][mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
+			ax4.plot(d[participant]['trials'][trial][mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
 
-			ax3.plot(d[participant]['trials'][trial]['thumb9z'], 'r-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[participant]['trials'][trial]['thumb10z'], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax3.plot(d[participant]['trials'][trial][mark[2]], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax4.plot(d[participant]['trials'][trial][mark[3]], 'r-', linewidth = 0.5, alpha = 0.5)
 
-			ax3.plot(d[participant]['trials'][trial]['thumb9y'], 'g-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[participant]['trials'][trial]['thumb10y'], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax3.plot(d[participant]['trials'][trial][mark[4]], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax4.plot(d[participant]['trials'][trial][mark[5]], 'g-', linewidth = 0.5, alpha = 0.5)
 
 
-	ax1.set_title('Thumb9x, Rightward')
-	ax2.set_title('Thumb10x, Rightward')
-	ax3.set_title('Thumb9x, Leftward')
-	ax4.set_title('Thumb10x, Leftward')
+	ax1.set_title(titles[0])
+	ax2.set_title(titles[1])
+	ax1.set_ylabel('Rightward')
+	ax3.set_ylabel('Leftward')
 	plt.show()
 
