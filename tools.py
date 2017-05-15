@@ -25,13 +25,15 @@ def save_data(object_name):
 		cPickle.dump(object_name, f, cPickle.HIGHEST_PROTOCOL)
 
 def text_data(text_lines):
+	measure_rate = re.search(r'\d+.\d+', text_lines[3]).group()
+	measure_rate = float(measure_rate)
 	name = re.search(r'Roman_\w+', text_lines[2])
 	if name is None:
 		name = re.search(r'Accuracy\w+', text_lines[2])
 	time = re.search(r'\d+:\d+:\d+', text_lines[2])
 	trial_len = re.search(r'\d+\.\d+', text_lines[4])
 
-	return name.group(), time.group(), trial_len.group()
+	return name.group(), time.group(), trial_len.group(), measure_rate
 
 def columnise(data_lines):
 	result = []
@@ -42,7 +44,7 @@ def columnise(data_lines):
 
 def dictionarise(text_lines, data_lines):
 	result = {}
-	result['name'], result['time'], result['data_capture_period'] = text_data(text_lines)
+	result['name'], result['time'], result['data_capture_period'], result['measurement_rate'] = text_data(text_lines)
 
 	colheaders = text_lines[8][:-3].split('\t')
 	colheaders[0].replace(' ', '_')
