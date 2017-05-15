@@ -47,7 +47,9 @@ def dictionarise(text_lines, data_lines):
 	result['name'], result['time'], result['data_capture_period'], result['measurement_rate'] = text_data(text_lines)
 
 	colheaders = text_lines[8][:-3].split('\t')
-	colheaders[0].replace(' ', '_')
+	colheaders[0] = colheaders[0][:-2]
+	# colheaders[0].replace(' ', '_')
+
 	columns = columnise(data_lines)
 
 	for colheader in colheaders:
@@ -120,6 +122,8 @@ def add_participant(p_id, folder):
 	current[p_id] = organise(folder)
 	print '-----------------------------------------------------------'
 	print 'Participant\'s id:               {}'.format(p_id)
+	print 'Measurement rate:                {}'.format(current[p_id]['trials']['t1']['measurement_rate'])
+	print '---'
 	print 'Number of accuracy trials:       {}'.format(len( current[p_id]['accuracy'].keys() ))
 	print 'Number of short trials:          {}'.format(len( current[p_id]['short_trials'].keys() ))
 	print 'Number of experimental trials:   {}\n'.format(len( current[p_id]['trials'].keys() ))
@@ -285,7 +289,7 @@ def choose_marker(data, participant, marker = 'index'):
 		raise NameError('Marker {} does not exist. Specify index, thumb or wrist'.format(marker))
 
 	d = data
-	p = participant.upper()
+	p = participant
 
 	fig = plt.figure()
 	ax1 = fig.add_subplot(221)
