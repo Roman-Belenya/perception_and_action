@@ -267,14 +267,23 @@ def get_accuracy_summary(data):
 
 def choose_marker(data, participant, marker = 'index'):
 
+	if participant not in data.keys():
+		raise NameError('Participant {} does notexist'.format(participant))
+
 	if marker == 'index':
 		mark = ('index7x', 'index8x', 'index7y', 'index8y', 'index7z', 'index8z')
 		titles = ('Index7', 'Index8')
 	elif marker == 'thumb':
 		mark = ('thumb9x', 'thumb10x', 'thumb9y', 'thumb10y', 'thumb9z', 'thumb10z')
 		titles = ('Thumb9', 'Thumb10')
+	elif marker == 'wrist':
+		mark = ('wrist11x', 'wrist12x', 'wrist11y', 'wrist12y', 'wrist11z', 'wrist12z')
+		titles = ('Wrist11', 'Wrist12')
+	else:
+		raise NameError('Marker {} does not exist. Specify index, thumb or wrist'.format(marker))
 
 	d = data
+	p = participant.upper()
 
 	fig = plt.figure()
 	ax1 = fig.add_subplot(221)
@@ -282,26 +291,26 @@ def choose_marker(data, participant, marker = 'index'):
 	ax3 = fig.add_subplot(223, sharex = ax1)
 	ax4 = fig.add_subplot(224, sharex = ax1)
 
-	for trial in d[participant]['trials'].keys():
+	for trial in d[p]['trials'].keys():
 		if 'LeftToRight' in d[participant]['trials'][trial]['name']:
-			ax1.plot(d[participant]['trials'][trial][mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[participant]['trials'][trial][mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
+			ax1.plot(d[p]['trials'][trial][mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
+			ax2.plot(d[p]['trials'][trial][mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
 
-			ax1.plot(d[participant]['trials'][trial][mark[2]], 'r-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[participant]['trials'][trial][mark[3]], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax1.plot(d[p]['trials'][trial][mark[2]], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax2.plot(d[p]['trials'][trial][mark[3]], 'r-', linewidth = 0.5, alpha = 0.5)
 
-			ax1.plot(d[participant]['trials'][trial][mark[4]], 'g-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[participant]['trials'][trial][mark[5]], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax1.plot(d[p]['trials'][trial][mark[4]], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax2.plot(d[p]['trials'][trial][mark[5]], 'g-', linewidth = 0.5, alpha = 0.5)
 
-		elif 'RightToLeft' in d[participant]['trials'][trial]['name']:
-			ax3.plot(d[participant]['trials'][trial][mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[participant]['trials'][trial][mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
+		elif 'RightToLeft' in d[p]['trials'][trial]['name']:
+			ax3.plot(d[p]['trials'][trial][mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
+			ax4.plot(d[p]['trials'][trial][mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
 
-			ax3.plot(d[participant]['trials'][trial][mark[2]], 'r-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[participant]['trials'][trial][mark[3]], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax3.plot(d[p]['trials'][trial][mark[2]], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax4.plot(d[p]['trials'][trial][mark[3]], 'r-', linewidth = 0.5, alpha = 0.5)
 
-			ax3.plot(d[participant]['trials'][trial][mark[4]], 'g-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[participant]['trials'][trial][mark[5]], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax3.plot(d[p]['trials'][trial][mark[4]], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax4.plot(d[p]['trials'][trial][mark[5]], 'g-', linewidth = 0.5, alpha = 0.5)
 
 
 	ax1.set_title(titles[0])
