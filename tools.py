@@ -198,6 +198,8 @@ def check_accuracy(trial):
 	error_y = np.array(trial['errory']) * 100
 
 	dist = np.array(trial['totalerror']) * 100
+	mean_dist = np.mean(dist)
+	median_dist = np.median(dist)
 
 	r1 = 1
 	r2 = 0.5
@@ -223,8 +225,8 @@ def check_accuracy(trial):
 	ax2 = fig.add_subplot(132)
 	ax2.plot(dist, 'b-')
 	ax2.axhline(1, color = 'r')
-	ax2.axhline(np.mean(dist), color = 'r', linestyle = ':', label = 'Mean')
-	ax2.axhline(np.median(dist), color = '#FF8D0D', linestyle = ':', label = 'Median')
+	ax2.axhline(mean_dist, color = 'r', linestyle = ':', label = 'Mean')
+	ax2.axhline(median_dist, color = '#FF8D0D', linestyle = ':', label = 'Median')
 	ax2.set_ylim([0, 5])
 	x0, x1 = ax2.get_xlim()
 	y0, y1 = ax2.get_ylim()
@@ -247,6 +249,7 @@ def check_accuracy(trial):
 	ax3.legend()
 
 	plt.show()
+	return(mean_dist, median_dist)
 
 
 def get_accuracy_summary(data):
