@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import style
 from scipy.io import savemat
-style.use('ggplot')
+# style.use('ggplot')
 
 
 def load_data():
