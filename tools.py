@@ -5,7 +5,7 @@ import cPickle
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import style
+from matplotlib import style, patches
 from scipy.io import savemat
 # style.use('ggplot')
 
@@ -328,3 +328,32 @@ def choose_marker(data, participant, marker = 'index'):
 	ax3.set_ylabel('Leftward')
 	plt.show()
 
+
+def check_visible(data, participant):
+
+	d = data
+	p = participant
+
+	fig = plt.figure()
+	ax = fig.add_subplot(111)
+	ax.add_patch(patches.Rectangle((-2, -2), 4, 4, color = [0.8, 0.8, 0.8]))
+
+	for trial in d[p]['trials'].keys():
+
+		if 'Visible' in d[p]['trials'][trial]['name']:
+			dx_index = d[p]['trials'][trial]['index8x'][-1] - d[p]['trials'][trial]['objectx'][-1]
+			dz_index = d[p]['trials'][trial]['index8z'][-1] - d[p]['trials'][trial]['objectz'][-1]
+
+			dx_thumb = d[p]['trials'][trial]['thumb9x'][-1] - d[p]['trials'][trial]['objectx'][-1]
+			dz_thumb = d[p]['trials'][trial]['thumb9z'][-1] - d[p]['trials'][trial]['objectz'][-1]
+
+			ax.plot(dx_index * 100, dz_index * 100, 'r^')
+			ax.plot(dx_thumb * 100, dz_thumb * 100, 'bv')
+
+	xl, xr = -10, 10
+	zb, zt = -10, 10
+	ax.set_xlim(xl, xr)
+	ax.set_ylim(zb, zt)
+	asp = (xr - xl) / (zt - zb)
+	ax.set_aspect(asp)
+	plt.show()
