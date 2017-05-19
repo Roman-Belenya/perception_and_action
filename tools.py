@@ -5,9 +5,9 @@ import cPickle
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import style, patches
+from matplotlib import style, patches, lines
 from scipy.io import savemat
-# style.use('ggplot')
+style.use('ggplot')
 
 
 def load_data():
@@ -23,6 +23,17 @@ def load_data():
 def save_data(object_name):
 	with open('ExperimentData.pkl', 'ab') as f:
 		cPickle.dump(object_name, f, cPickle.HIGHEST_PROTOCOL)
+
+
+def manual_save_data(object_name):
+	ans = raw_input('The data will be overwritten. Continue? Yes/no')
+	if ans == 'Yes':
+		with open('ExperimentData.pkl', 'wb') as f:
+			cPickle.dump(object_name, f, cPickle.HIGHEST_PROTOCOL)
+	else:
+		print 'Cancelling ...'
+		return
+
 
 def text_data(text_lines):
 	measure_rate = re.search(r'\d+.\d+', text_lines[3]).group()
@@ -329,7 +340,7 @@ def choose_marker(data, participant, marker = 'index'):
 	plt.show()
 
 
-def check_visible(data, participant):
+def check_visible(data, participant, index = 'index8', thumb = 'thumb9'):
 
 	d = data
 	p = participant
@@ -338,17 +349,19 @@ def check_visible(data, participant):
 	ax = fig.add_subplot(111)
 	ax.add_patch(patches.Rectangle((-2, -2), 4, 4, color = [0.8, 0.8, 0.8]))
 
-	for trial in d[p]['trials'].keys():
+	for trial in d[p]['trials'].values():
 
-		if 'Visible' in d[p]['trials'][trial]['name']:
-			dx_index = d[p]['trials'][trial]['index8x'][-1] - d[p]['trials'][trial]['objectx'][-1]
-			dz_index = d[p]['trials'][trial]['index8z'][-1] - d[p]['trials'][trial]['objectz'][-1]
+		if 'Visible' in trial['name']:
 
-			dx_thumb = d[p]['trials'][trial]['thumb9x'][-1] - d[p]['trials'][trial]['objectx'][-1]
-			dz_thumb = d[p]['trials'][trial]['thumb9z'][-1] - d[p]['trials'][trial]['objectz'][-1]
+			dx_index = (trial[index + 'x'][-1] - trial['objectx'][-1]) * 100
+			dz_index = (trial[index + 'z'][-1] - trial['objectz'][-1]) * 100
 
-			ax.plot(dx_index * 100, dz_index * 100, 'r^')
-			ax.plot(dx_thumb * 100, dz_thumb * 100, 'bv')
+			dx_thumb = (trial[thumb + 'x'][-1] - trial['objectx'][-1]) * 100
+			dz_thumb = (trial[thumb + 'z'][-1] - trial['objectz'][-1]) * 100
+
+			ax.plot(dx_index, dz_index, 'r^')
+			ax.plot(dx_thumb, dz_thumb, 'bv')
+			ax.add_line(lines.Line2D([dx_thumb, dx_index], [dz_thumb, dz_index], color = 'k', linewidth = 1, alpha = 0.1))
 
 	xl, xr = -10, 10
 	zb, zt = -10, 10
@@ -356,4 +369,5 @@ def check_visible(data, participant):
 	ax.set_ylim(zb, zt)
 	asp = (xr - xl) / (zt - zb)
 	ax.set_aspect(asp)
+	ax.set_title(p)
 	plt.show()
