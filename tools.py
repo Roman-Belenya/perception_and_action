@@ -349,19 +349,25 @@ def check_visible(data, participant, index = 'index8', thumb = 'thumb9'):
 	ax = fig.add_subplot(111)
 	ax.add_patch(patches.Rectangle((-2, -2), 4, 4, color = [0.8, 0.8, 0.8]))
 
+	dist_x = []
+
 	for trial in d[p]['trials'].values():
 
 		if 'Visible' in trial['name']:
 
-			dx_index = (trial[index + 'x'][-1] - trial['objectx'][-1]) * 100
-			dz_index = (trial[index + 'z'][-1] - trial['objectz'][-1]) * 100
+			if index != None:
+				dx_index = (trial[index + 'x'][-1] - trial['objectx'][-1]) * 100
+				dz_index = (trial[index + 'z'][-1] - trial['objectz'][-1]) * 100
+				ax.plot(dx_index, dz_index, 'r^')
+				dist_x.append(abs(dx_index))
 
-			dx_thumb = (trial[thumb + 'x'][-1] - trial['objectx'][-1]) * 100
-			dz_thumb = (trial[thumb + 'z'][-1] - trial['objectz'][-1]) * 100
+			if thumb != None:
+				dx_thumb = (trial[thumb + 'x'][-1] - trial['objectx'][-1]) * 100
+				dz_thumb = (trial[thumb + 'z'][-1] - trial['objectz'][-1]) * 100
+				ax.plot(dx_thumb, dz_thumb, 'bv')
 
-			ax.plot(dx_index, dz_index, 'r^')
-			ax.plot(dx_thumb, dz_thumb, 'bv')
-			ax.add_line(lines.Line2D([dx_thumb, dx_index], [dz_thumb, dz_index], color = 'k', linewidth = 1, alpha = 0.1))
+			if index != None and thumb != None:
+				ax.add_line(lines.Line2D([dx_thumb, dx_index], [dz_thumb, dz_index], color = 'k', linewidth = 1, alpha = 0.1))
 
 	xl, xr = -10, 10
 	zb, zt = -10, 10
@@ -371,3 +377,7 @@ def check_visible(data, participant, index = 'index8', thumb = 'thumb9'):
 	ax.set_aspect(asp)
 	ax.set_title(p)
 	plt.show()
+
+	if dist_x != []:
+		print 'Mean   = {} +- {}\nMedian = {}\n'.format(np.mean(dist_x), np.std(dist_x), np.median(dist_x))
+		return np.mean(dist_x), np.std(dist_x)
