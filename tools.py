@@ -106,6 +106,9 @@ def organise(files_folder):
 
 
 def add_participant(p_id, folder):
+	''' Creates a new participant in the data file.
+
+	Usage: add_participant(p_id = 'P00', folder = '../P00')'''
 
 	if 'ExperimentData.pkl' in os.listdir(os.getcwd()):
 		prior = load_data().keys()
@@ -196,7 +199,12 @@ def dic2mat():
 	savemat('ExperimentData.mat', dic)
 
 
-def check_accuracy(trial):
+def check_accuracy(data, participant, trial = 't1'):
+	''' Make an accuracy graph.
+
+	Usage: check_accuracy(data = d, participant = 'P00', trial = 't0')'''
+
+	trial = data[participant]['accuracy'][trial]
 
 	eye_x = np.array(trial['averagexeye']) * 100
 	eye_z = np.array(trial['averagezeye']) * 100
@@ -286,6 +294,9 @@ def get_accuracy_summary(data):
 
 
 def choose_marker(data, participant, marker = 'index'):
+	''' Creates an overlayed graph of all reaches for the specified marker
+
+	Usage: choose_marker(data = d, participant = 'P00', marker = 'index') '''
 
 	if participant not in data.keys():
 		raise NameError('Participant {} does notexist'.format(participant))
@@ -341,6 +352,9 @@ def choose_marker(data, participant, marker = 'index'):
 
 
 def check_visible(data, participant, index = 'index8', thumb = 'thumb9'):
+	'''Check accuracy on visible target trials only. Creates a scatterplot of grasps relative to the target. This is to check how well a participant performed the task.
+
+	Usage: check_visible(data = d, partitipant = 'P00', index = 'index8', thumb = 'thumb9')'''
 
 	d = data
 	p = participant

@@ -1,4 +1,5 @@
 *.pyc
 *.pkl
+*.txt
 .ipynb_checkpoints/
 try.py
