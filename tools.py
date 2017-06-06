@@ -34,6 +34,12 @@ def manual_save_data(object_name, data_file):
 		print 'Cancelling ...'
 		return
 
+def manual_load_data(data_file):
+	with open(data_file, 'rb') as f:
+		data = cPickle.load(f)
+	return data
+
+
 
 def text_data(text_lines):
 	measure_rate = re.search(r'\d+.\d+', text_lines[3]).group()
