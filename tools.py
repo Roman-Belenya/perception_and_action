@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import style, patches, lines
 from scipy.io import savemat
-style.use('ggplot')
+# style.use('ggplot')
 
 
 def load_data():
@@ -402,3 +402,15 @@ def check_visible(data, participant, index = 'index8', thumb = 'thumb9'):
 	if dist_x != []:
 		print 'Mean   = {} +- {}\nMedian = {}\n'.format(np.mean(dist_x), np.std(dist_x), np.median(dist_x))
 		return np.mean(dist_x), np.std(dist_x)
+
+
+
+def draw_cues(axis, ybottom = None, ytop = None):
+	if ybottom is None:
+		ybottom = axis.get_ylim()[0]
+	if ytop is None:
+		ytop = axis.get_ylim()[1]
+	cues = [0.353 + n * 0.072 for n in range(8)]
+
+	for cue in cues:
+		axis.add_line(lines.Line2D([cue, cue], [ybottom, ytop], color = 'k', alpha = 0.5))
