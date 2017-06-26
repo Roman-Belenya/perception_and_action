@@ -329,26 +329,26 @@ def choose_marker(data, participant, marker = 'index'):
 	ax3 = fig.add_subplot(223, sharex = ax1)
 	ax4 = fig.add_subplot(224, sharex = ax1)
 
-	for trial in d[p]['trials'].keys():
+	for trial in d[p]['trials'].values():
 		if 'LeftToRight' in d[participant]['trials'][trial]['name']:
-			ax1.plot(d[p]['trials'][trial][mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[p]['trials'][trial][mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
+			ax1.plot(trial[mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
+			ax2.plot(trial[mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
 
-			ax1.plot(d[p]['trials'][trial][mark[2]], 'r-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[p]['trials'][trial][mark[3]], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax1.plot(trial[mark[2]], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax2.plot(trial[mark[3]], 'r-', linewidth = 0.5, alpha = 0.5)
 
-			ax1.plot(d[p]['trials'][trial][mark[4]], 'g-', linewidth = 0.5, alpha = 0.5)
-			ax2.plot(d[p]['trials'][trial][mark[5]], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax1.plot(trial[mark[4]], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax2.plot(trial[mark[5]], 'g-', linewidth = 0.5, alpha = 0.5)
 
 		elif 'RightToLeft' in d[p]['trials'][trial]['name']:
-			ax3.plot(d[p]['trials'][trial][mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[p]['trials'][trial][mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
+			ax3.plot(trial[mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
+			ax4.plot(trial[mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
 
-			ax3.plot(d[p]['trials'][trial][mark[2]], 'r-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[p]['trials'][trial][mark[3]], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax3.plot(trial[mark[2]], 'r-', linewidth = 0.5, alpha = 0.5)
+			ax4.plot(trial[mark[3]], 'r-', linewidth = 0.5, alpha = 0.5)
 
-			ax3.plot(d[p]['trials'][trial][mark[4]], 'g-', linewidth = 0.5, alpha = 0.5)
-			ax4.plot(d[p]['trials'][trial][mark[5]], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax3.plot(trial[mark[4]], 'g-', linewidth = 0.5, alpha = 0.5)
+			ax4.plot(trial[mark[5]], 'g-', linewidth = 0.5, alpha = 0.5)
 
 
 	ax1.set_title(titles[0])
