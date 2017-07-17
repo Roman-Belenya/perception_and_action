@@ -355,6 +355,7 @@ def choose_marker(data, participant, marker = 'index'):
 	ax2.set_title(titles[1])
 	ax1.set_ylabel('Rightward')
 	ax3.set_ylabel('Leftward')
+	plt.suptitle(p)
 	plt.show()
 
 
