@@ -415,3 +415,31 @@ def draw_cues(axis, ybottom = None, ytop = None):
 
 	for cue in cues:
 		axis.add_line(lines.Line2D([cue, cue], [ybottom, ytop], color = 'k', alpha = 0.5))
+
+
+
+def get_intercept(p0, p1, q):
+    '''Make a stright line between p0 and p1, find the perpendicular vector to this line passing through q, determine the intercept and distance.
+
+    Usage: intercept, distance, error = get_intercept([p0x, p0y, p0z], [p1x, p1y, p1z], [qx, qy, qz])
+
+	intercept is the point on the straight line where it crosses the perpendicular vector from point q
+	distance is the Eucledian distance between q and the intercept
+	error is the computational inaccuracy from computing the dot product between the straight and the perpendicular line. Should be very close to 0.
+
+    Reference:
+    https://www.youtube.com/watch?v=0lG53-ogF2k'''
+
+    p0 = np.array(p0); p1 = np.array(p1); q = np.array(q)
+
+    v = np.array(p1 - p0) # direction of the sraight line
+    pq = np.array(p0 - q) # point on the direction vector for the given point
+
+    t = -np.sum(v * pq) / np.sum(v**2) # this is the dot product between straight and perp line rearranged for t.
+    intercept = p0 + t * v
+
+    distance = np.sqrt( np.sum((q - intercept)**2) )
+
+    error = np.dot(v, intercept - q)
+
+    return intercept, distance, error
