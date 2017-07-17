@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import style, patches, lines
 from scipy.io import savemat
-# style.use('ggplot')
+style.use('ggplot')
 
 
 def load_data():
@@ -330,7 +330,7 @@ def choose_marker(data, participant, marker = 'index'):
 	ax4 = fig.add_subplot(224, sharex = ax1)
 
 	for trial in d[p]['trials'].values():
-		if 'LeftToRight' in d[participant]['trials'][trial]['name']:
+		if 'LeftToRight' in trial['name']:
 			ax1.plot(trial[mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
 			ax2.plot(trial[mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
 
@@ -340,7 +340,7 @@ def choose_marker(data, participant, marker = 'index'):
 			ax1.plot(trial[mark[4]], 'g-', linewidth = 0.5, alpha = 0.5)
 			ax2.plot(trial[mark[5]], 'g-', linewidth = 0.5, alpha = 0.5)
 
-		elif 'RightToLeft' in d[p]['trials'][trial]['name']:
+		elif 'RightToLeft' in trial['name']:
 			ax3.plot(trial[mark[0]], 'b-', linewidth = 0.5, alpha = 0.5)
 			ax4.plot(trial[mark[1]], 'b-', linewidth = 0.5, alpha = 0.5)
 
