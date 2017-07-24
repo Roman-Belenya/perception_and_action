@@ -436,10 +436,10 @@ def get_intercept(p0, p1, q):
     pq = np.array(p0 - q) # point on the direction vector for the given point
 
     t = -np.sum(v * pq) / np.sum(v**2) # this is the dot product between straight and perp line rearranged for t.
+
     intercept = p0 + t * v
-
-    distance = np.sqrt( np.sum((q - intercept)**2) )
-
+    distance = np.sqrt(np.sum((q - intercept)**2))
+    linelength = np.sqrt(np.sum((p1 - p0)**2))
     error = np.dot(v, intercept - q)
 
-    return intercept, distance, error
+    return intercept, distance, linelength, error
