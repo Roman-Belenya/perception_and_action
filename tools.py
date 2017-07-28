@@ -443,3 +443,23 @@ def get_intercept(p0, p1, q):
     error = np.dot(v, intercept - q)
 
     return intercept, distance, linelength, error
+
+
+
+def find_area(coordinates, deviations, linelength = None):
+	''' Find the area bounded between the marker curve and the straight line as well as the average height'''
+
+    d_straightline = np.sqrt( sum(np.diff(coordinates)**2) )
+    d_deviations = np.diff(deviations)
+
+    rectangles = d_straightline * deviations[1:]
+    triangles = 0.5 * d_straightline * d_deviations
+
+    area = sum(rectangles + triangles)
+
+    if linelength is not None:
+        avgheight = area / linelength
+    else:
+        avgheight = None
+
+    return area, avgheight
