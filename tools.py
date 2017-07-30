@@ -432,14 +432,14 @@ def get_intercept(p0, p1, q):
 
     p0 = np.array(p0); p1 = np.array(p1); q = np.array(q)
 
-    v = np.array(p1 - p0) # direction of the sraight line
-    pq = np.array(p0 - q) # point on the direction vector for the given point
+    v = p1 - p0 # direction of the sraight line
+    pq = p0 - q # point on the direction vector for the given point
 
-    t = -np.sum(v * pq) / np.sum(v**2) # this is the dot product between straight and perp line rearranged for t.
+    t = -sum(v * pq) / sum(v**2) # this is the dot product between straight and perp line rearranged for t.
 
     intercept = p0 + t * v
-    distance = np.sqrt(np.sum((q - intercept)**2))
-    linelength = np.sqrt(np.sum((p1 - p0)**2))
+    distance = np.sqrt(sum((q - intercept)**2))
+    linelength = np.sqrt(sum((p1 - p0)**2))
     error = np.dot(v, intercept - q)
 
     return intercept, distance, linelength, error
@@ -447,19 +447,26 @@ def get_intercept(p0, p1, q):
 
 
 def find_area(coordinates, deviations, linelength = None):
-	''' Find the area bounded between the marker curve and the straight line as well as the average height'''
+	''' Find the area (m^2) bounded between the marker curve and the straight line as well as the average height (m)
 
-    d_straightline = np.sqrt( sum(np.diff(coordinates)**2) )
-    d_deviations = np.diff(deviations)
+		Coordinates must be a list containing three sublists for x, y and z coordinates of points on the straight line.
+		Deviations are the Eucledian distance between the the straight line points and the marker points.
 
-    rectangles = d_straightline * deviations[1:]
-    triangles = 0.5 * d_straightline * d_deviations
+		Usage:
+		area, avgheight = find_area(coordintaes, deviations, linelength)
+	'''
 
-    area = sum(rectangles + triangles)
+	d_straightline = np.sqrt( sum(np.diff(coordinates)**2) ) # distances btween the points on the straight line
+	d_deviations = np.diff(deviations) # difference between the deviation distances
 
-    if linelength is not None:
-        avgheight = area / linelength
-    else:
-        avgheight = None
+	rectangles = d_straightline * deviations[1:]
+	triangles = 0.5 * d_straightline * d_deviations
 
-    return area, avgheight
+	area = sum(rectangles + triangles)
+
+	if linelength is not None:
+		avgheight = area / linelength
+	else:
+		avgheight = None
+
+	return area, avgheight
