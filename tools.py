@@ -10,6 +10,15 @@ from scipy.io import savemat
 style.use('ggplot')
 
 
+def std_error(values):
+    if type(values) is not np.ndarray:
+        values = np.array(values)
+    std_err = np.std(values) / np.sqrt(len(values))
+
+    return std_err
+
+
+
 def load_data():
 	obj = {}
 	with open('ExperimentData.pkl', 'rb') as f:
