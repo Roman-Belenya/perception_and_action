@@ -5,9 +5,11 @@ import cPickle
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import style, patches, lines
+from matplotlib import patches, lines
 from scipy.io import savemat
-style.use('ggplot')
+from scipy.spatial.distance import cdist
+
+plt.style.use('ggplot')
 
 
 def std_error(values):
@@ -426,6 +428,7 @@ def draw_cues(axis, ybottom = None, ytop = None):
 		axis.add_line(lines.Line2D([cue, cue], [ybottom, ytop], color = 'k', alpha = 0.5))
 
 
+########## Wrist trajectory deviation functions ##########
 
 def get_intercept(p0, p1, q):
     '''Make a stright line between p0 and p1, find the perpendicular vector to this line passing through q, determine the intercept and distance.
@@ -479,3 +482,36 @@ def find_area(coordinates, deviations, linelength = None):
 		avgheight = None
 
 	return area, avgheight
+
+
+########## Nearest neighbour analysis functions ##########
+# Clark & Evans, Ecology, Vol. 35, No. 4 (Oct., 1954), pp. 445-453
+
+def get_distance_matrix(xs, zs):
+    if len(xs) != len(zs):
+        raise Exception('Vectors for x and z coordinates should be equal, got {} and {}'.format(len(xs), len(zs)))
+
+    paired = zip(xs, zs)
+    d = cdist(paired, paired, 'euclidean')
+
+    return d
+
+def get_nearest_neighbour(dist):
+    if dist.shape[0] != dist.shape[1]:
+        raise Exception('Distance matrix should have square form, got {}'.format(dist.shape))
+    elif np.any(dist.diagonal() != 0):
+        raise Exception('Distance matrix should have 0 on its diagonal, got {}'.format(dist.diagonal()))
+
+    np.fill_diagonal(dist, np.inf) # replace zeros with infinity on the diagonal
+    idcs, mindist = dist.argmin(axis = 0), dist.min(axis = 0)
+
+    return idcs, mindist
+
+def R(fix_x, fix_z, A = 0.3 * 0.5):
+    matrix = get_distance_matrix(fix_x, fix_z)
+    idsc, mindist = get_nearest_neighbour(matrix)
+
+    rho = len(mindist) / A
+    R = 2 * np.sqrt(rho) * np.sum(mindist) / len(mindist)
+
+    return R
