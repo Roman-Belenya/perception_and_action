@@ -439,10 +439,20 @@ def get_intercept(p0, p1, q):
 	distance is the Eucledian distance between q and the intercept
 	error is the computational inaccuracy from computing the dot product between the straight and the perpendicular line. Should be very close to 0.
 
+    p1  o
+        |
+        |
+    int o------------------------o q
+        |
+        |
+    p0  o
+
     Reference:
     https://www.youtube.com/watch?v=0lG53-ogF2k'''
 
-    p0 = np.array(p0); p1 = np.array(p1); q = np.array(q)
+    p0 = np.array(p0, dtype = 'float64')
+    p1 = np.array(p1, dtype = 'float64')
+    q = np.array(q, dtype = 'float64')
 
     v = p1 - p0 # direction of the sraight line
     pq = p0 - q # point on the direction vector for the given point
