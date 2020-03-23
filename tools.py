@@ -492,6 +492,23 @@ def find_area(coordinates, deviations, linelength = None):
 		avgheight = None
 
 	return area, avgheight
+	
+	
+def yPlane_intercept(p0, p1, yPlane):
+	''' Returns intercept of a line defined by p0 and p1 with the y plane. p0 and p1 should be [x, y, z]. yPlane is a scalar coordinate of the plane on the y-axis. If there is no intercept (parallel to y-plane), returns [nan, nan, nan]
+		
+		intercept = yPlane_intercept([p0x, p0y, p0z], 
+									 [p1x, p1y, p1z],
+									 yPlane)'''
+	p0 = np.array(p0); p1 = np.array(p1); yPlane = np.array(yPlane) 	
+	
+	direction = p1 - p0
+	if direction[2] == 0: # y-component
+		intercept = [np.nan] * 3
+	else:
+		t = (yPlane - p0[2]) / direction[2]
+		intercept = p0 + t * direction
+	return intercept
 
 
 ########## Nearest neighbour analysis functions ##########
